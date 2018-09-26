@@ -10,6 +10,10 @@
 cwlVersion: v1.0
 class: Workflow
 
+
+requirements:
+  - class: StepInputExpressionRequirement
+
 inputs:
   - id: submissionId
     type: int
@@ -36,20 +40,12 @@ steps:
     out:
       - id: filePath
       - id: entity
-      
-  readWorkflowParameters:
-    run:  job_file_reader_tool_yaml_sample.cwl
-    in:
-      - id: inputfile
-        source: "#downloadSubmission/filePath"
-    out:
-      - id: message
-
+  
   coreWorkflow:
     run: sample-workflow.cwl
     in:
-      - id: message
-        source: "#readWorkflowParameters/message"
+      - id: myfile
+        source: "#downloadSubmission/filePath"
     out:
       - id: stdout
   
