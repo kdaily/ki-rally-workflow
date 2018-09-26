@@ -1,17 +1,27 @@
 #!/usr/bin/env cwl-runner
 #
-#  This sample workflow simply echos its input
+#  This sample workflow gets sprints for a rally
 #
 cwlVersion: v1.0
 class: CommandLineTool
-baseCommand: echo
+baseCommand: [bootstrap-rally-sprint, get-sprints]
+
+requirements:
+  - class: InlineJavascriptRequirement
+
+hints:
+  DockerRequirement:
+      dockerPull: dailyk/hbgdki-bootstrap:latest
+
 inputs:
-  message:
-    type: string
+  - id: myfile
+    type: File
     inputBinding:
-      position: 1
-      
-      
+      loadContents: true
+      position: 0
+      prefix: --rallyNumber
+      valueFrom: $(JSON.parse(self.contents)['rally'])
+
 stdout: stdout.txt
 
 outputs:
